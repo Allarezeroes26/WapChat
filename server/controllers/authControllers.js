@@ -1,6 +1,7 @@
 const generateToken = require('../config/utils')
 const User = require('../models/userModel')
 const bcrypt = require('bcrypt')
+const cloudinary = require("../config/cloudinary")
 
 const signup = async (req, res) => {
     const  { fullName, email, password } = req.body
@@ -45,16 +46,71 @@ const signup = async (req, res) => {
 
     } catch (err) {
         console.error("Error in signup", err)
-        res.status(500).json({message: "Internal Server Error"})
+        res.status(500).json({message: err.message})
+    }
+}
+const login = async (req, res) => {
+    const {email, password} = req.body
+    
+    try {
+        const user = await User.findOne({email})
+        if (!user) {
+            return res.status(400).json({success: false, message: "Invalid Credentials"})
+        }        
+
+        const isPasswordCorrect = await bcrypt.compare(password, user.password)
+        if (!isPasswordCorrect) {
+            return res.status(400).json({status: false, message: "Invalid Credentials"})
+        }
+
+        generateToken(user._id, res)
+
+        res.status(200).json({
+            _id: user._id,
+            fullName: user.fullName,
+            email: user.email,
+            profilePic: user.profilePic
+        })
+    } catch (err) {
+        console.log('Error Login', err)
+        res.status(500).json({success: false, message: err.message})
+    }
+}
+const logout = (req, res) => {
+    try {
+        res.cookie("token", "", {maxAge:0})
+        res.status(200).json({succcess: true, message: "Logged out successfully"})
+    } catch (err) {
+
+    }
+}
+const updateProfile = async () => {
+    try {
+        const { profilePic } = req.body;
+        const userId = req.user._id;
+
+        if (!profilePic) {
+            return res.status(400).json({message: "Profile pic is required"})
+        }
+
+        const uploadResponse = await cloudinary.uploader.upload(profilePic)
+        const updatedUser = await User.findByIdAndUpdate(userId, {profilePic:uploadResponse.secure_url}, {new: true})
+
+        res.status(200).json(updatedUser)
+
+    } catch (err) {
+        console.error("Error ",err)
+        res.status(500).json({success: false, message: err.message})
+    }
+}
+const checkAuth = (req, res) => {
+    try {
+        res.status(200).json(req.user);
+    } catch (err) {
+        console.log("Error ", err.message)
+        res.status(500).json({success: false, message: err.message})
     }
 }
 
 
-const login = (req, res) => {
-    
-}
-const logout = (req, res) => {
-    res.send("logout route")
-}
-
-module.exports = {signup, login, logout}
+module.exports = {signup, login, logout, updateProfile, checkAuth}
