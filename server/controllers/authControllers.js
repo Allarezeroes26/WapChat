@@ -84,7 +84,7 @@ const logout = (req, res) => {
 
     }
 }
-const updateProfile = async () => {
+const updateProfile = async (req, res) => {
     try {
         const { profilePic } = req.body;
         const userId = req.user._id;
