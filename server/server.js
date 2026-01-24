@@ -19,7 +19,7 @@ const port = process.env.PORT
 connectDB()
 
 app.use("/api/auth", authRoutes)
-app.use("/api/message", messageRoutes)
+app.use("/api/messages", messageRoutes)
 
 app.listen(port, () => {
     console.log(`Server is running in port ${port}`)

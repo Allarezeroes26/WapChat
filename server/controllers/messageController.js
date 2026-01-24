@@ -1,4 +1,5 @@
 const Message = require("../models/messageModel");
+const User = require("../models/userModel")
 
 const getUserSidebar = async (req, res) => {
     try {
