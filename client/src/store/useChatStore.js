@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import toast from 'react-hot-toast'
 import { api } from '../api/api'
 
-export const useChatStore = create((set) => ({
+export const useChatStore = create((set, get) => ({
     messages: [],
     users: [],
     selectedUser: null,
@@ -26,13 +26,35 @@ export const useChatStore = create((set) => ({
         set({ isMessagesLoading: true })
         try {
             const res = await api.get(`/api/messages/${userId}`)
-            set({ messages: res.data })
+            set({ messages: res.data.messages })
         } catch (err) {
             toast.error(err.response.data.message);
         } finally {
             set({ isMessagesLoading: false })
         }
     },
+
+    sendMessage: async (messageData) => {
+        const { selectedUser, messages } = get()
+
+        if (!selectedUser) {
+            toast.error("No user selected")
+            return
+        }
+
+        try {
+            const res = await api.post(
+            `/api/messages/send/${selectedUser._id}`,
+            messageData
+            )
+
+            set({ messages: [...messages, res.data] })
+        } catch (err) {
+            console.error("Send message error:", err)
+            toast.error(err.response?.data?.message || "Failed to send message")
+        }
+    },
+
 
     setSelectedUser: (selectedUser) => set({selectedUser})
 }))
