@@ -14,7 +14,6 @@ const LoginPage = () => {
 
   const { login, isLoggingIn } = useAuthStore();
 
-  // Optional: simple form validation
   const validateForm = () => {
     if (!formData.email.trim()) return toast.error("Email is required");
     if (!formData.password) return toast.error("Password is required");
@@ -28,10 +27,8 @@ const LoginPage = () => {
 
   return (
     <div className='min-h-screen grid lg:grid-cols-2'>
-      {/* Left side */}
       <div className="flex flex-col justify-center items-center p-6 sm:p-12">
         <div className="w-full max-w-md space-y-8">
-          {/* Logo */}
           <div className='text-center mb-8'>
             <div className="flex flex-col items-center gap-2 group">
               <div className='size-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors'>
@@ -43,9 +40,7 @@ const LoginPage = () => {
             </div>
           </div>
 
-          {/* Form */}
           <form onSubmit={handleSubmit} className='space-y-6 font-paragraph'>
-            {/* Email */}
             <div className="form-control">
               <label className='label'>
                 <span className='label-text font-medium mb-2'>Email</span>
@@ -63,7 +58,6 @@ const LoginPage = () => {
               </div>
             </div>
 
-            {/* Password */}
             <div className="form-control">
               <label className='label'>
                 <span className='label-text font-medium mb-2'>Password</span>
@@ -91,8 +85,6 @@ const LoginPage = () => {
                 </button>
               </div>
             </div>
-
-            {/* Submit */}
             <button 
               type='submit'
               className='btn btn-primary font-paragraph w-full'
@@ -107,7 +99,6 @@ const LoginPage = () => {
             </button>
           </form>
 
-          {/* Footer links */}
           <div className="text-center font-paragraph">
             <p className='text-base-content/60'>
               Don’t have an account? {" "}

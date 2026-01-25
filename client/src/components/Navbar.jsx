@@ -10,15 +10,12 @@ const Navbar = () => {
     <>
       <header className='bg-base-100 border-b border-base-300 fixed w-full top-0 z-40'>
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          {/* Logo */}
           <Link to='/' className='flex items-center gap-2.5 hover:opacity-80 transition-all'>
             <div className="size-9 rounded-lg font-display bg-primary/10 flex items-center justify-center">
               <MessageSquare className='size-5 text-primary'/>
             </div>
             <h1 className='text-lg font-bold'>CR Chat</h1>
           </Link>
-
-          {/* Buttons */}
           <div className="flex items-center gap-2">
             <Link to={'/settings'} className='btn btn-sm gap-2 transition-colors'>
               <Settings className='size-4'/>

@@ -13,7 +13,7 @@ import SettingPages from './pages/SettingPages'
 import ProfilePage from './pages/ProfilePage'
 
 function App() {
-  const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
+  const { authUser, checkAuth, isCheckingAuth, onlineUsers } = useAuthStore();
   const { theme } = useThemeStore(); // Fixed: Destructured theme
 
   useEffect(() => {

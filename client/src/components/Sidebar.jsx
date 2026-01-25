@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useChatStore } from '../store/useChatStore'
 import SidebarSkeleton from './Skeleton/SidebarSkeleton'
 import {Users} from 'lucide-react'
@@ -8,11 +8,16 @@ const Sidebar = () => {
 
     const { getUsers, users, selectedUser, setSelectedUser, isUsersLoading } = useChatStore()
 
-    const {onlineUsers} = useAuthStore()
+    const {onlineUsers, authUser} = useAuthStore()
+
+    const [ showOnlineOnly, setShowOnlineOnly ] = useState(false);
 
     useEffect(() => {
         getUsers()
     }, [getUsers])
+
+    const onlineCount = onlineUsers.length;
+    const filteredUsers = showOnlineOnly ? users.filter(user => onlineUsers.includes(user._id)) : users;
 
     if (isUsersLoading) return <SidebarSkeleton/>
   return (
@@ -22,10 +27,17 @@ const Sidebar = () => {
                 <Users className='size-6'/>
                 <span className='font-medium hidden lg:block'>Contacts</span>
             </div>
+            <div className="mt-3 hidden lg:flex items-center gap-2">
+                <label className='cursor-pointer flex items-center gap-2'>
+                    <input type="checkbox" checked={showOnlineOnly} onChange={(e) => setShowOnlineOnly(e.target.checked)} className='checkbox checkbox-sm' />
+                    <span className='text-sm'>Show Online Only</span>
+                </label>
+                <span className='text-xs text-zinc-500'>({onlineCount} online)</span>
+            </div>
         </div>
 
         <div className="overflow-y-auto w-full py-3">
-            {users.map((user) => (
+            {filteredUsers.map((user) => (
                 <button 
                     key={user._id}
                     onClick={() => setSelectedUser(user)}
@@ -53,6 +65,10 @@ const Sidebar = () => {
                         </div>
                     </button> 
             ))}
+
+            {filteredUsers.length === 0 && (
+                <div className='text-center text-zinc-500 py-4'>No Online Users</div>
+            )}
         </div>
     </aside>
   )

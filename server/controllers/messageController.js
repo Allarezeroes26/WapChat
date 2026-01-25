@@ -1,3 +1,4 @@
+const { getReceiverSocketId, io } = require("../config/socket");
 const Message = require("../models/messageModel");
 const User = require("../models/userModel")
 const cloudinary = require('cloudinary').v2
@@ -40,6 +41,11 @@ const sendMessage = async (req, res) => {
 
         let imageUrl;
 
+        if (!text && !image) {
+            return res.status(400).json({ message: "Message cannot be empty" })
+        }
+
+
         if (image) {
             const uploadResponse = await cloudinary.uploader.upload(image);
             imageUrl = uploadResponse.secure_url;
@@ -53,6 +59,11 @@ const sendMessage = async (req, res) => {
         })
 
         await newMessage.save();
+
+        const receiverSocketId = getReceiverSocketId(receiverId)
+        if(receiverSocketId) {
+            io.to(receiverSocketId).emit("newMessage", newMessage)
+        }
 
         res.status(201).json(newMessage)
 
