@@ -1,5 +1,6 @@
 const Message = require("../models/messageModel");
 const User = require("../models/userModel")
+const cloudinary = require('cloudinary').v2
 
 const getUserSidebar = async (req, res) => {
     try {

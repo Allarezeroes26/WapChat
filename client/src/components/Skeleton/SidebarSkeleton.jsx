@@ -14,7 +14,7 @@ const SidebarSkeleton = () => {
 
         <div className="overflow-y-auto w-full py-3">
             { skeletonContacts.map((_, idx) => (
-                <div className="w-full p-3 flex items-center gap-3">
+                <div key={idx} className="w-full p-3 flex items-center gap-3">
                     <div className="relative mx-auto lg:mx-0">
                         <div className="skeleton size-12 rounded-full"/>
                     </div>
