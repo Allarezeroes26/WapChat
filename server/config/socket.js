@@ -13,7 +13,6 @@ const io = new Server(server, {
     }
 })
 
-//store online 
 
 function getReceiverSocketId(userId) {
     return userSocketMap[userId]
@@ -28,20 +27,16 @@ io.on("connection", (socket) => {
   userSocketMap[userId] = socket.id;
   console.log("User connected:", userId, socket.id);
 
-  // Emit updated online users list
   io.emit("getOnlineUsers", Object.keys(userSocketMap));
 
   socket.on("disconnect", () => {
     console.log("User disconnected:", userId, socket.id);
-    // Only remove if this socket ID matches (handles reconnects)
     if (userSocketMap[userId] === socket.id) {
       delete userSocketMap[userId];
       io.emit("getOnlineUsers", Object.keys(userSocketMap));
     }
   });
 });
-
-
 
 
 module.exports = {io, app, server, getReceiverSocketId}
