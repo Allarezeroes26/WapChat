@@ -11,10 +11,10 @@ app.use(express.json({limit: '10mb'}))
 app.use(express.urlencoded({extended: true, limit: "10mb"}))
 app.use(cookieParser())
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: process.env.CLIENT_URL,
     credentials: true
 }))
-const port = process.env.PORT
+const port = process.env.PORT || 5003
 connectDB()
 
 app.use("/api/auth", authRoutes)
