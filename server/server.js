@@ -11,7 +11,7 @@ app.use(express.json({limit: '10mb'}))
 app.use(express.urlencoded({extended: true, limit: "10mb"}))
 app.use(cookieParser())
 app.use(cors({
-    origin: process.env.CLIENT_URL,
+    origin: [process.env.CLIENT_URL, "https://clonechatui.onrender.com"],
     credentials: true
 }))
 const port = process.env.PORT || 5003
