@@ -81,7 +81,7 @@ const logout = (req, res) => {
         res.cookie("token", "", {maxAge:0})
         res.status(200).json({succcess: true, message: "Logged out successfully"})
     } catch (err) {
-
+        res.status(500).json({ success: false, message: "Logout failed!"})
     }
 }
 const updateProfile = async (req, res) => {
