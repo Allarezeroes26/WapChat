@@ -14,13 +14,12 @@ import ProfilePage from './pages/ProfilePage'
 
 function App() {
   const { authUser, checkAuth, isCheckingAuth, onlineUsers } = useAuthStore();
-  const { theme } = useThemeStore(); // Fixed: Destructured theme
+  const { theme } = useThemeStore();
 
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
 
-  // Apply theme to the whole document
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);
